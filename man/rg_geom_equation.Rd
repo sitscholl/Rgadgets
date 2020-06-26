@@ -4,10 +4,14 @@
 \alias{rg_geom_equation}
 \title{Adding model equation to ggplot. Wrapper around ggpmisc::stat_poly_eq() with standard options for label}
 \usage{
-rg_geom_equation(formula = y ~ x, ...)
+rg_geom_equation(formula, elements = c("eq", "r2", "p"), sep = ", ", ...)
 }
 \arguments{
-\item{formula}{Model formula}
+\item{formula}{Formula, Model formula}
+
+\item{elements}{String or vector of strings, The parts of the model statistics that should be included in the output}
+
+\item{sep}{String, separator between model elements}
 
 \item{...}{Further parameters passed on to ggpmisc::stat_poly_eq()
 one of index or name.}
