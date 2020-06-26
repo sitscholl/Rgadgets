@@ -1,0 +1,10 @@
+Package: Rgadgets
+Type: Package
+Title: Contains various utility functions developed during the PhD
+Version: 0.1.0
+Authors@R: person('Simon', 'Tscholl', role = c("aut", "cre"), email = 'sitscholl@eurac.edu')
+Description: A collection of useful functions
+License: GPL (>= 2)
+Encoding: UTF-8
+LazyData: true
+RoxygenNote: 7.1.0
