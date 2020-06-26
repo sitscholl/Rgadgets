@@ -4,7 +4,7 @@
 # Rgadgets
 
 The goal of Rgadgets is to store useful functions and potentially also
-datasets that are needed frequently for data analysis.
+some datasets that are needed frequently for data analysis.
 
 ## Installation
 

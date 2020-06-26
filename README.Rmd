@@ -15,7 +15,7 @@ knitr::opts_chunk$set(
 
 # Rgadgets
 
-The goal of Rgadgets is to store useful functions and potentially also datasets that are needed frequently for data analysis.
+The goal of Rgadgets is to store useful functions and potentially also some datasets that are needed frequently for data analysis.
 
 ## Installation
 
