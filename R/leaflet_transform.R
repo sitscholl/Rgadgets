@@ -8,7 +8,7 @@
 #'
 #' points <- leaflet_transform(station_shp)
 
-leaflet_transform <- function(object) {
+rg_leaflet_transform <- function(object) {
 
   if (any(inherits(object, 'SpatialPointsDataFrame'),
           inherits(object, 'SpatialLinesDataFrame'),
