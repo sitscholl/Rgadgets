@@ -31,6 +31,20 @@
 #' @format An sf object loaded using st_read()
 "st_border"
 
+#' Border of Municipalities in South Tyrol
+#'
+#' Polygon delineating the border of the municipalities in South Tyrol (Italy)
+#'
+#' @format An sf object loaded using st_read()
+"st_municipalities"
+
+#' Border of the districts in South Tyrol
+#'
+#' Polygon delineating the border of the districts in South Tyrol (Italy)
+#'
+#' @format An sf object loaded using st_read()
+"st_districts"
+
 #' Shapefile with location of province meteorological stations
 #'
 #' A shapefile with point coordinates that describe the location of the province meteorological stations
