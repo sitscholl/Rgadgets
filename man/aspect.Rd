@@ -14,7 +14,7 @@ A raster file loaded using raster::raster()
 aspect
 }
 \description{
-Aspect raster for South Tyrol with a 20km buffer at 25m resolution. Calculated from dem
+Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
 using the aspect function in ArcGIS Pro. Method set to planar.
 }
 \keyword{datasets}
