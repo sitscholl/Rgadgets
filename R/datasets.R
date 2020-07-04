@@ -1,14 +1,32 @@
 #' Digital Elevation Model of South Tyrol
 #'
-#' Digital elevation model for South Tyrol with a 20km buffer at 25m resolution.
+#' Digital elevation model for South Tyrol with a 10km buffer at 25m resolution.
 #'
 #' @format A raster file loaded using raster::raster()
 #' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
 "dem"
 
+#' Digital Elevation Model of South Tyrol
+#'
+#' Digital elevation model for South Tyrol with a 10km buffer at 100m resolution. Calculated from
+#' the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
+#'
+#' @format A raster file loaded using raster::raster()
+#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+"dem100"
+
+#' Digital Elevation Model of South Tyrol
+#'
+#' Digital elevation model for South Tyrol with a 10km buffer at 250m resolution. Calculated from
+#' the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
+#'
+#' @format A raster file loaded using raster::raster()
+#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+"dem250"
+
 #' Slope raster of South Tyrol
 #'
-#' Slope raster for South Tyrol with a 20km buffer at 25m resolution. Calculated from dem
+#' Slope raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
 #' using the slope function in ArcGIS Pro. Units in degree and method set to planar.
 #'
 #' @format A raster file loaded using raster::raster()
@@ -17,7 +35,7 @@
 
 #' Aspect raster of South Tyrol
 #'
-#' Aspect raster for South Tyrol with a 20km buffer at 25m resolution. Calculated from dem
+#' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
 #' using the aspect function in ArcGIS Pro. Method set to planar.
 #'
 #' @format A raster file loaded using raster::raster()
@@ -26,7 +44,7 @@
 
 #' Aspect raster of South Tyrol reclassified to values from 1 - 9
 #'
-#' Aspect raster for South Tyrol with a 20km buffer at 25m resolution. Calculated from dem
+#' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
 #' using the aspect function in ArcGIS Pro. Method set to planar. Original values have been
 #' reclassified to values between 1 and 9. To see what the single values mean check out the
 #' table 'aspect_map' in the Rgadgets package.
