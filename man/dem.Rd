@@ -14,6 +14,6 @@ A raster file loaded using raster::raster()
 dem
 }
 \description{
-Digital elevation model for South Tyrol with a 20km buffer at 25m resolution.
+Digital elevation model for South Tyrol with a 10km buffer at 25m resolution.
 }
 \keyword{datasets}

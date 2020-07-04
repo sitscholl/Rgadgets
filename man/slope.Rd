@@ -14,7 +14,7 @@ A raster file loaded using raster::raster()
 slope
 }
 \description{
-Slope raster for South Tyrol with a 20km buffer at 25m resolution. Calculated from dem
+Slope raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
 using the slope function in ArcGIS Pro. Units in degree and method set to planar.
 }
 \keyword{datasets}
