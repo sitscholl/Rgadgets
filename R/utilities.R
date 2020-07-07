@@ -63,18 +63,19 @@ rg_list_shp <- function(path = getwd(), pattern = '.shp$', full.names = T, ...) 
 #' @param range numeric, this number is multiplied with the interquartile range for type = 'iqr'
 #' or the standard deviation for type = 'sigma' and determines the width of the window in which
 #' values are considered as NOT being outliers
+#' @param na.rm logical; if true, any NA and NaN's are removed from v before the quantiles, means or standard deviations are computed.
 #' @keywords outliers, cleaning
 #' @export
 #' @examples
 #' remove_outliers(c(1, 2, 3, 100))
 
-rg_remove_outliers <- function(v, type = 'iqr', fill = NA, range = ifelse(type == 'iqr', 1.5, 3)) {
+rg_remove_outliers <- function(v, type = 'iqr', fill = NA, range = ifelse(type == 'iqr', 1.5, 3), na.rm = FALSE) {
 
   if (type == 'iqr') {
 
     #####IQR test for outliers
-    q25 = quantile(v, c(.25))
-    q75 = quantile(v, c(.75))
+    q25 = quantile(v, c(.25), na.rm = na.rm)
+    q75 = quantile(v, c(.75), na.rm = na.rm)
     iqr = q75 - q25
     upper = q75 + (iqr * range)
     lower = q25 - (iqr * range)
@@ -82,8 +83,8 @@ rg_remove_outliers <- function(v, type = 'iqr', fill = NA, range = ifelse(type =
   } else if (type == 'sigma') {
 
     ####3 sigma test for outliers
-    v_mean = mean(v)
-    v_sd = sd(v)
+    v_mean = mean(v, na.rm = na.rm)
+    v_sd = sd(v, na.rm = na.rm)
     lower = v - (range * v_sd)
     upper = v + (range * v_sd)
 
