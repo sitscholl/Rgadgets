@@ -8,7 +8,8 @@ rg_remove_outliers(
   v,
   type = "iqr",
   fill = NA,
-  range = ifelse(type == "iqr", 1.5, 3)
+  range = ifelse(type == "iqr", 1.5, 3),
+  na.rm = FALSE
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ the replacement values can be computed}
 \item{range}{numeric, this number is multiplied with the interquartile range for type = 'iqr'
 or the standard deviation for type = 'sigma' and determines the width of the window in which
 values are considered as NOT being outliers}
+
+\item{na.rm}{logical; if true, any NA and NaN's are removed from v before the quantiles, means or standard deviations are computed.}
 }
 \description{
 This function removes outliers from a vector and replaces them with an optional value based
