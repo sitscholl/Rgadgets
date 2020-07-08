@@ -6,11 +6,11 @@
 #' @param dburl URL; URL of the Province Database. If left empty the original API will be used
 #' @param station_code string; Code of the station ("SCODE")
 #' @param sensor_code string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation).
-#' For possible values check the Rgadgets::rg_province_info() function.
+#' For possible values check \code{\link{rg_province_info}}.
 #' @param datestart date; Starting date for the download
 #' @param dateend date; End date for the download
 #' @param format string, wide or long for a wide or long table as ar result
-#' @source \link{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
+#' @source \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
 #' @importFrom dplyr mutate select rename arrange
 #' @importFrom magrittr "%>%" extract
 #' @importFrom lubridate as_datetime
@@ -24,6 +24,7 @@
 
 rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, dateend, format = 'wide'){
 
+  #use url from province database if non given
   if(is.null(dburl)) dburl<- "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries"
 
   dat <-
@@ -60,8 +61,8 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
       dplyr::rename_with(tolower) %>%
 
       select(-c(url, date, start, end)) %>%
-      select(datetime, everything()) %>%
-      arrange(sensor, datetime) %>%
+      select(st_id, sensor, datetime, everything()) %>%
+      arrange(st_id, sensor, datetime) %>%
 
       mutate(sensor = recode(sensor,
                              'LT' = 'tair',
@@ -86,7 +87,7 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
 #' It unifies both information returning the complete range of information present in the Open Data Portal South Tyrol.
 #' @param format string; digit "table" if the output should be a Dataframe or "spatial" for a spatial
 #' output as sf-object
-#' @source \link{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
+#' @source \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
 #' @importFrom jsonlite fromJSON
 #' @importFrom sf st_as_sf
 #' @export
