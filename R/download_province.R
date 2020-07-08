@@ -68,7 +68,10 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
                              'LT' = 'tair',
                              'GS' = 'rad',
                              'N' = 'preci',
-                             'SD' = 'radh'))
+                             'SD' = 'radh')) %>%
+
+      #Sometimes duplicated records appear in table (often on 2018-10-28). Keep first row
+      distinct(st_id, sensor, datetime, .keep_all = T)
 
   } else {stop("None of the URLS is valid. Please modify the Input parameters")}
 
