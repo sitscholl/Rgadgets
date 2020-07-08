@@ -3,6 +3,9 @@
 \name{rg_province_info}
 \alias{rg_province_info}
 \title{Return Meteo South Tyrol Metainformation}
+\source{
+\url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
+}
 \usage{
 rg_province_info(format = "table")
 }
