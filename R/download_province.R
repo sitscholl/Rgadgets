@@ -1,8 +1,6 @@
-#' Bulk download Meteorological Data (v2)
+#' Download meteorological data from the province API of South Tyrol
 #'
-#' Function for accessing the Meteorological Data. This function will replace the
-#' Original Function in the next version. No save to CSV is possible anymore. On the other side
-#' it will be possible to speed up the actual processing times and to make multiple requests at once
+#' Function for accessing the Meteorological Data from the province of South Tyrol.
 #' @param dburl URL; URL of the Province Database. If left empty the original API will be used
 #' @param station_code string; Code of the station ("SCODE")
 #' @param sensor_code string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation).
