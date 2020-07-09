@@ -2,7 +2,7 @@
 % Please edit documentation in R/download_province.R
 \name{rg_province_get}
 \alias{rg_province_get}
-\title{Bulk download Meteorological Data (v2)}
+\title{Download meteorological data from the province API of South Tyrol}
 \source{
 \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
 }
@@ -31,7 +31,5 @@ For possible values check \code{\link{rg_province_info}}.}
 \item{format}{string, wide or long for a wide or long table as ar result}
 }
 \description{
-Function for accessing the Meteorological Data. This function will replace the
-Original Function in the next version. No save to CSV is possible anymore. On the other side
-it will be possible to speed up the actual processing times and to make multiple requests at once
+Function for accessing the Meteorological Data from the province of South Tyrol.
 }

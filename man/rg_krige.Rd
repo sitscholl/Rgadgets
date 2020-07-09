@@ -2,7 +2,7 @@
 % Please edit documentation in R/kriging.R
 \name{rg_krige}
 \alias{rg_krige}
-\title{Title}
+\title{Kriging of spatial data}
 \usage{
 rg_krige(frml, input_data, pred_locations, raster_out = F, dem = NULL, ...)
 }
@@ -28,7 +28,8 @@ to transfer values from pred_locations to raster cells}
 
 }
 \description{
-Title
+Tunction to perform kriging with automatic model selection using the function \code{\link[automap]{autoKrige}}.
+Can generate continuous raster surfaces of interpolated values.
 }
 \examples{
 dem <- raster::raster('dem.tif')
