@@ -1,73 +1,59 @@
 #' Digital Elevation Model of South Tyrol
 #'
-#' Digital elevation model for South Tyrol with a 10km buffer at 25m resolution.
+#' Digital elevation models for South Tyrol with resolutions at 25, 100 and 250m. Lower resolution dems
+#' have been calculated from the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
 #'
 #' @format A raster file loaded using raster::raster()
 #' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"dem"
+"rg_dem"
 
-#' Digital Elevation Model of South Tyrol
+#' #' Slope raster of South Tyrol
+#' #'
+#' #' Slope raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
+#' #' using the slope function in ArcGIS Pro. Units in degree and method set to planar.
+#' #'
+#' #' @format A raster file loaded using raster::raster()
+#' #' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+#' "rg_slope"
 #'
-#' Digital elevation model for South Tyrol with a 10km buffer at 100m resolution. Calculated from
-#' the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
-#'
-#' @format A raster file loaded using raster::raster()
-#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"dem100"
+#' #' Aspect raster of South Tyrol
+#' #'
+#' #' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
+#' #' using the aspect function in ArcGIS Pro. Method set to planar.
+#' #'
+#' #' @format A raster file loaded using raster::raster()
+#' #' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+#' "rg_aspect"
 
-#' Digital Elevation Model of South Tyrol
+#' Reclassify table for aspect values in degree using 10 classes
 #'
-#' Digital elevation model for South Tyrol with a 10km buffer at 250m resolution. Calculated from
-#' the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
+#' A data.frame containing the range of aspect values and their corresponding exposition as a string ('north', 'south' ...)
 #'
-#' @format A raster file loaded using raster::raster()
-#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"dem250"
-
-#' Slope raster of South Tyrol
-#'
-#' Slope raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
-#' using the slope function in ArcGIS Pro. Units in degree and method set to planar.
-#'
-#' @format A raster file loaded using raster::raster()
-#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"slope"
-
-#' Aspect raster of South Tyrol
-#'
-#' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
-#' using the aspect function in ArcGIS Pro. Method set to planar.
-#'
-#' @format A raster file loaded using raster::raster()
-#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"aspect"
-
-#' Aspect raster of South Tyrol reclassified to values from 1 - 9
-#'
-#' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
-#' using the aspect function in ArcGIS Pro. Method set to planar. Original values have been
-#' reclassified to values between 1 and 9. To see what the single values mean check out the
-#' table 'aspect_map' in the Rgadgets package.
-#'
-#' @format A raster file loaded using raster::raster()
-#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
-"aspectre"
-
-#' Reclassify table for aspect values in degree
-#'
-#' A data.frame containing the range of aspect values and their corresponding exposition as a string ('nort', 'sout' ...)
-#'
-#' @format A data frame with 10 rows and 4 variables:
+#' @format A data frame with 10 rows and 3 variables:
 #' \describe{
 #' \item{from}{start value of aspect in degree}
 #' \item{to}{end value of aspect in degree}
-#' \item{code}{new integer code that has been assigned to the aspect range}
-#' \item{aspect_str}{string representation of orientation, n = north, ne = north-east, e = east, se = south-east,
+#' \item{name}{string representation of orientation, n = north, ne = north-east, e = east, se = south-east,
 #' s = south, sw = south-west, w = west, nw = north-west, f = flat}
 #' }
 #'
 #' @source \url{https://desktop.arcgis.com/de/arcmap/10.3/tools/spatial-analyst-toolbox/how-aspect-works.htm}
 "aspect_map"
+
+#' Reclassify table for aspect values in degree using 5 classes
+#'
+#' A data.frame containing the range of aspect values and their corresponding exposition as a string ('north', 'south' ...)
+#'
+#' @format A data frame with 5 rows and 3 variables:
+#' \describe{
+#' \item{from}{start value of aspect in degree}
+#' \item{to}{end value of aspect in degree}
+#' \item{name}{string representation of orientation, n = north, ne = north-east, e = east, se = south-east,
+#' s = south, sw = south-west, w = west, nw = north-west, f = flat}
+#' }
+#'
+#' @source \url{https://desktop.arcgis.com/de/arcmap/10.3/tools/spatial-analyst-toolbox/how-aspect-works.htm}
+"aspect_map2"
 
 #' Border of South Tyrol
 #'
