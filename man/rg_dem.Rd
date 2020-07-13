@@ -13,18 +13,22 @@ A raster file loaded using raster::raster()
 \usage{
 rg_dem
 
-rg_dem()
+rg_dem(res = 25)
+}
+\arguments{
+\item{res}{integer, resolution of resulting raser file in meters. Possible values include 25, 100 and 250}
 }
 \value{
 a raster file
 }
 \description{
-Digital elevation model for South Tyrol with a 10km buffer at 25m resolution.
+Digital elevation models for South Tyrol with resolutions at 25, 100 and 250m. Lower resolution dems
+have been calculated from the dem at 25m resolution using the ArcGIS "resample" tool with bilinear interpolation.
 }
 \examples{
 dem <- rg_dem()
 }
 \seealso{
-\code{\link{rg_dem}}
+\code{\link{rg_dem}}; \code{\link{rg_dem100}}; \code{\link{rg_dem250}}
 }
 \keyword{datasets}
