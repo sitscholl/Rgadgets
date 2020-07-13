@@ -3,14 +3,20 @@
 \docType{data}
 \name{aspect_map}
 \alias{aspect_map}
-\title{Reclassify table for aspect values in degree}
+\title{#' Slope raster of South Tyrol
+#'
+#' Slope raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
+#' using the slope function in ArcGIS Pro. Units in degree and method set to planar.
+#'
+#' @format A raster file loaded using raster::raster()
+#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+"rg_slope"}
 \format{
-A data frame with 10 rows and 4 variables:
+A data frame with 10 rows and 3 variables:
 \describe{
 \item{from}{start value of aspect in degree}
 \item{to}{end value of aspect in degree}
-\item{code}{new integer code that has been assigned to the aspect range}
-\item{aspect_str}{string representation of orientation, n = north, ne = north-east, e = east, se = south-east,
+\item{name}{string representation of orientation, n = north, ne = north-east, e = east, se = south-east,
 s = south, sw = south-west, w = west, nw = north-west, f = flat}
 }
 }
@@ -21,6 +27,17 @@ s = south, sw = south-west, w = west, nw = north-west, f = flat}
 aspect_map
 }
 \description{
-A data.frame containing the range of aspect values and their corresponding exposition as a string ('nort', 'sout' ...)
+#' Aspect raster of South Tyrol
+#'
+#' Aspect raster for South Tyrol with a 10km buffer at 25m resolution. Calculated from dem
+#' using the aspect function in ArcGIS Pro. Method set to planar.
+#'
+#' @format A raster file loaded using raster::raster()
+#' @source \url{https://land.copernicus.eu/imagery-in-situ/eu-dem/eu-dem-v1-0-and-derived-products/eu-dem-v1.0}
+"rg_aspect"
+Reclassify table for aspect values in degree using 10 classes
+}
+\details{
+A data.frame containing the range of aspect values and their corresponding exposition as a string ('north', 'south' ...)
 }
 \keyword{datasets}
