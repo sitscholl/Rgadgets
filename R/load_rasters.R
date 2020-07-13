@@ -10,10 +10,12 @@
 #' dem <- rg_dem()
 rg_dem <- function(res = 25) {
 
+  res <- as.character(res)
+
   r_name <- switch (res,
-    25 = 'dem.tif',
-    100 = 'dem100.tif',
-    250 = 'dem250.tif'
+    "25" = 'dem.tif',
+    "100" = 'dem100.tif',
+    "250" = 'dem250.tif'
   )
 
   return(raster::raster(system.file("extdata", r_name, package = "Rgadgets")))
