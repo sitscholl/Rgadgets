@@ -26,7 +26,7 @@
 #'
 #' result <- rg_krige(frml = resid ~ 1, input_data = data_in, pred_locations = st_grd, raster_out = T, dem = dem)
 
-rg_krige <- function(frml, input_data, pred_locations, raster_out = F, dem = NULL, ...) {
+rg_krige <- function(frml, input_data, pred_locations, raster_out = F, dem = NULL, verbose = T, ...) {
 
   stopifnot(inherits(input_data, 'Spatial'))
   stopifnot(inherits(pred_locations, 'Spatial'))
