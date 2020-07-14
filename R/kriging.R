@@ -47,11 +47,22 @@ rg_krige <- function(frml, input_data, pred_locations, raster_out = F, dem = NUL
 
   }
 
-  invisible(capture.output(krige_pred <- automap::autoKrige(formula = frml,
-                                                            input_data = input_data,
-                                                            new_data = pred_locations,
-                                                            verbose = F,
-                                                            ...)))
+  if (verbose == F) {
+
+    invisible(capture.output(krige_pred <- automap::autoKrige(formula = frml,
+                                                              input_data = input_data,
+                                                              new_data = pred_locations,
+                                                              verbose = F,
+                                                              ...)))
+
+  } else {
+
+    krige_pred <- automap::autoKrige(formula = frml,
+                                     input_data = input_data,
+                                     new_data = pred_locations,
+                                     ...)
+
+  }
 
   if (raster_out) {
 
