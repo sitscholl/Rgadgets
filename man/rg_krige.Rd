@@ -30,6 +30,8 @@ transform a raster to point object using \code{\link[raster]{rasterToPoints}}. S
 \item{dem}{raster object, a digital elevation model, will be used in the function \code{\link[raster]{rasterize}}
 to transfer values from pred_locations to raster cells}
 
+\item{verbose}{logical, should intermediate messages be printed?}
+
 \item{...}{parameters passed on to \code{\link[automap]{autoKrige}}}
 }
 \value{
