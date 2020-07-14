@@ -68,11 +68,8 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
       tryCatch({as_tibble(jsonlite::fromJSON(x))},error=function(e){NA})
     }))
 
-  #Some values are duplicated because we added on day to the end date for the download range. Therefore
-  #we remove those duplicated values by removing the first row (=last downloaded value) from each dataframe.
   fmt <-
     dat %>%
-    mutate(Data = map(Data, ~slice(., -1))) %>%
     unnest(cols = c(Data))
 
   if (nrow(fmt) > 0) {
