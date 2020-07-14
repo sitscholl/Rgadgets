@@ -59,7 +59,7 @@ rg_krige <- function(frml, input_data, pred_locations, raster_out = F, dem = NUL
 
     result <-
       krige_pred$krige_output %>%
-      raster::rasterize(y = dem, field = 'var1.pred', fun = mean, mask = T)
+      raster::rasterize(y = dem, field = 'var1.pred', fun = mean)
 
   } else {
 
