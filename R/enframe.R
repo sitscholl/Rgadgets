@@ -1,7 +1,7 @@
 #' Enframe a list of file paths into a tibble
 #'
 #' @param folder string, path to folder where the files are stored
-#' @param pattern string, a pattern used to identify the files, see \code{\link[base][list.files]}
+#' @param pattern string, a pattern used to identify the files, see \code{\link[base]{list.files}}
 #' @param recursive logical, should the listing recurse into directories?
 #' @param sep string, separator that is used to split up the basename of the files into different columns.
 #' If character, sep is interpreted as a regular expression. The default value is a regular expression that matches any sequence of non-alphanumeric values.
