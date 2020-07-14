@@ -13,6 +13,7 @@
 #' @param raster_out logical, indicating if an interpolated raster or a table is desired as output
 #' @param dem raster object, a digital elevation model, will be used in the function \code{\link[raster]{rasterize}}
 #' to transfer values from pred_locations to raster cells
+#' @param verbose logical, should intermediate messages be printed?
 #' @param ... parameters passed on to \code{\link[automap]{autoKrige}}
 #'
 #' @return

@@ -4,7 +4,15 @@
 \alias{rg_krige}
 \title{Kriging of spatial data}
 \usage{
-rg_krige(frml, input_data, pred_locations, raster_out = F, dem = NULL, ...)
+rg_krige(
+  frml,
+  input_data,
+  pred_locations,
+  raster_out = F,
+  dem = NULL,
+  verbose = T,
+  ...
+)
 }
 \arguments{
 \item{frml}{formula that defines the dependent variable as a linear model of independent variables;
