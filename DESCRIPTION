@@ -2,6 +2,7 @@ Package: Rgadgets
 Type: Package
 Title: Contains various utility functions developed during the PhD
 Version: 0.1.0
+Date: 2020-07-17
 Authors@R: person('Simon', 'Tscholl', role = c("aut", "cre"), email = 'sitscholl@eurac.edu')
 Description: A collection of useful functions and datasets.
 License: GPL (>= 2)
