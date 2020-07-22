@@ -29,7 +29,7 @@ rg_classify_aspect <- function(x, method = 'simple', ...) {
       mutate(name = cur_group_id()) %>%
       ungroup()
 
-    reclass <- raster::reclassify(aspect, as.matrix(aspect_table_re), ...)
+    reclass <- raster::reclassify(x, as.matrix(aspect_table_re), ...)
 
   } else if (inherits(x, "numeric") | inherits(x, "integer")) {
 
