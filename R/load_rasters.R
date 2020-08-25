@@ -3,7 +3,7 @@
 #' @param res integer, resolution of resulting raser file in meters. Possible values include 25, 100 and 250
 #'
 #' @return a raster file
-#' @seealso \code{\link{rg_dem}}; \code{\link{rg_dem100}}; \code{\link{rg_dem250}}
+#' @seealso \code{\link{rg_dem}}
 #' @export
 #'
 #' @examples

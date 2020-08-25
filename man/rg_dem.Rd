@@ -29,6 +29,6 @@ have been calculated from the dem at 25m resolution using the ArcGIS "resample" 
 dem <- rg_dem()
 }
 \seealso{
-\code{\link{rg_dem}}; \code{\link{rg_dem100}}; \code{\link{rg_dem250}}
+\code{\link{rg_dem}}
 }
 \keyword{datasets}
