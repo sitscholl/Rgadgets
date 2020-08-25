@@ -86,7 +86,7 @@ solar_daily_pot_insol <- function(doy, lat = 0) {
 
   stopifnot(length(lat) == 1)
 
-  extraterr_radiation <- Rgadgets::rad_extraterr(doy = doy)
+  extraterr_radiation <- Rgadgets::solar_extraterr(doy = doy)
 
   declination <- Rgadgets::solar_declination(doy = doy)
 
