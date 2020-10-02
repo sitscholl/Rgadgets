@@ -2,34 +2,65 @@
 % Please edit documentation in R/download_province.R
 \name{rg_province_get}
 \alias{rg_province_get}
+\alias{rg_province_info}
 \title{Download meteorological data from the province API of South Tyrol}
+\format{
+The table returned by the function \code{rg_progince_info} contains the following information:
+\describe{
+  \item{SCODE}{ID of the station}
+  \item{NAME_D}{Full name of the station}
+  \item{ALT}{Station elevation in meters}
+  \item{LONG}{Station longitude in EPSG:4326}
+  \item{LAT}{Station latitude in EPSG:4326}
+  \item{TYPE}{Sensor Type}
+  \item{DESC_D}{Full name of Sensor}
+  \item{unit}{Measurement unit of the sensor}
+}
+}
 \source{
 \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
 }
 \usage{
 rg_province_get(
-  dburl = NULL,
   station_code,
   sensor_code,
-  datestart,
-  dateend,
-  format = "wide"
+  datestart = Sys.Date() - 1,
+  dateend = Sys.Date(),
+  format = "wide",
+  dburl = "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries"
 )
+
+rg_province_info(format = "table")
 }
 \arguments{
-\item{dburl}{URL; URL of the Province Database. If left empty the original API will be used}
+\item{station_code}{string; Code of the station}
 
-\item{station_code}{string; Code of the station ("SCODE")}
-
-\item{sensor_code}{string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation).
-For possible values check \code{\link{rg_province_info}}.}
+\item{sensor_code}{string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation or "LT" for air temperature). Use \code{rg_province_info} for valid sensor names.}
 
 \item{datestart}{date; Starting date for the download}
 
 \item{dateend}{date; End date for the download}
 
-\item{format}{string, wide or long for a wide or long table as ar result}
+\item{format}{string, wide or long for a wide or long table as result for function \code{rg_province_get} and
+"table" or "spatial" if the output should be a table or sf-object for function \code{rg_province_info}}
+
+\item{dburl}{URL; URL of the Province Database}
 }
 \description{
-Function for accessing the Meteorological Data from the province of South Tyrol.
+Functions for accessing the Meteorological Data from the province of South Tyrol. The function
+\code{rg_province_get} can be used to download station measurements for the requested time
+period and stations. Information about valid station_codes and
+sensors can be retrieved using the function \code{rg_province_info}.
+}
+\section{Functions}{
+\itemize{
+\item \code{rg_province_info}: This function returns all the metainformation of the meteorological Data from the OpenData Portal South Tyrol.
+}}
+
+\examples{
+Get a vector of available station ids with air temperature measurements
+ids <- rg_province_info() \%>\% filter(TYPE == 'LT') \%>\% pull(SCODE)
+
+download data for all stations
+data <- rg_province_get(station_code = ids, sensor_code = 'LT', datestart = as.Date('20180101', format = '\%Y\%m\%d'), dateend = as.Date('20180105', format = '\%Y\%m\%d'))
 }
