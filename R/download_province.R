@@ -1,14 +1,32 @@
 #' Download meteorological data from the province API of South Tyrol
 #'
-#' Function for accessing the Meteorological Data from the province of South Tyrol.
-#' @param dburl URL; URL of the Province Database. If left empty the original API will be used
-#' @param station_code string; Code of the station ("SCODE")
-#' @param sensor_code string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation).
-#' For possible values check \code{\link{rg_province_info}}.
+#' Functions for accessing the Meteorological Data from the province of South Tyrol. The function
+#' \code{rg_province_get} can be used to download station measurements for the requested time
+#' period and stations. Information about valid station_codes and
+#' sensors can be retrieved using the function \code{rg_province_info}.
+#'
+#' @param station_code string; Code of the station
+#' @param sensor_code string; Abbreviation of the sensor of interest (e.g. "N" for Precipitation or "LT" for air temperature). Use \code{rg_province_info} for valid sensor names.
 #' @param datestart date; Starting date for the download
 #' @param dateend date; End date for the download
-#' @param format string, wide or long for a wide or long table as ar result
+#' @param format string, wide or long for a wide or long table as result for function \code{rg_province_get} and
+#' "table" or "spatial" if the output should be a table or sf-object for function \code{rg_province_info}
+#' @param dburl URL; URL of the Province Database
+#'
 #' @source \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
+#'
+#' @format The table returned by the function \code{rg_progince_info} contains the following information:
+#' \describe{
+#'   \item{SCODE}{ID of the station}
+#'   \item{NAME_D}{Full name of the station}
+#'   \item{ALT}{Station elevation in meters}
+#'   \item{LONG}{Station longitude in EPSG:4326}
+#'   \item{LAT}{Station latitude in EPSG:4326}
+#'   \item{TYPE}{Sensor Type}
+#'   \item{DESC_D}{Full name of Sensor}
+#'   \item{unit}{Measurement unit of the sensor}
+#' }
+#'
 #' @importFrom dplyr mutate select rename arrange
 #' @importFrom magrittr "%>%" extract
 #' @importFrom lubridate as_datetime
@@ -19,11 +37,21 @@
 #' @importFrom purrr pmap_chr map_df
 #' @importFrom tidyselect everything
 #' @export
+#' @examples
+#' Get a vector of available station ids with air temperature measurements
+#' ids <- rg_province_info() %>% filter(TYPE == 'LT') %>% pull(SCODE)
+#'
+#' download data for all stations
+#' data <- rg_province_get(station_code = ids, sensor_code = 'LT', datestart = as.Date('20180101', format = '%Y%m%d'), dateend = as.Date('20180105', format = '%Y%m%d'))
 
-rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, dateend, format = 'wide'){
+rg_province_get <- function(station_code,
+                            sensor_code,
+                            datestart = Sys.Date() - 1,
+                            dateend = Sys.Date(),
+                            format = 'wide',
+                            dburl = "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries"){
 
-  #use url from province database if non given
-  if(is.null(dburl)) dburl<- "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries"
+  stopifnot(all(sapply(list(datestart, dateend), lubridate::is.Date)))
 
   #If dateseq is more than one year sometimes data at the beginning is missing (because requested data is
   #too large in memory?). Therefore the data is downloaded separately for each year.
@@ -33,7 +61,7 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
   dateseq <- seq.Date(datestart, dateend, by = 'day')
   date_df <-
     dateseq %>%
-    split(year(.)) %>%
+    split(lubridate::year(.)) %>%
     tibble::enframe(name = 'year', value = 'date') %>%
     tidyr::unnest(date) %>%
 
@@ -42,7 +70,7 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
                      End = max(date), .groups = 'drop') %>%
     dplyr::select(-year) %>%
 
-    mutate(End = End + 1) %>%
+    dplyr::mutate(End = End + 1) %>%
     dplyr::mutate(dplyr::across(tidyselect::everything(), ~format(.x, format = "%Y%m%d")))
 
   dat <-
@@ -108,28 +136,19 @@ rg_province_get <- function(dburl=NULL, station_code, sensor_code, datestart, da
 
 }
 
-#' Return Meteo South Tyrol Metainformation
-#'
-#' This function returns all the metainformation of the meteorological Data from
-#' the OpenData Portal South Tyrol, It is a combination of both former functions `getMeteoStat` and `getMeteoSensor`.
-#' It unifies both information returning the complete range of information present in the Open Data Portal South Tyrol.
-#' @param format string; digit "table" if the output should be a Dataframe or "spatial" for a spatial
-#' output as sf-object
-#' @source \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
-#' @importFrom jsonlite fromJSON
-#' @importFrom sf st_as_sf
+#' @describeIn rg_province_get This function returns all the metainformation of the meteorological Data from the OpenData Portal South Tyrol.
 #' @export
 
-rg_province_info <- function( format="table" ){
+rg_province_info <- function(format="table") {
 
   stat      <- jsonlite::fromJSON("http://daten.buergernetz.bz.it/services/meteo/v1/stations")
   stat.prop <- stat$features$properties
   sens.prop <- jsonlite::fromJSON("http://daten.buergernetz.bz.it/services/meteo/v1/sensors")
 
-  ret <- merge(stat.prop,sens.prop,by="SCODE")
+  ret <- merge(stat.prop, sens.prop, by="SCODE")
 
-  if (format == "table")   ret<-ret
-  if (format == "spatial") ret<-st_as_sf(ret,coords=c("LONG","LAT"),crs=4326,na.fail = F)
+  if (format == "table")   ret <- ret %>% tibble::as_tibble()
+  if (format == "spatial") ret <- sf::st_as_sf(ret,coords=c("LONG","LAT"), crs=4326, na.fail = F)
 
   return(ret)
 }
