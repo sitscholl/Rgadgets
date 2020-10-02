@@ -5,7 +5,13 @@
 \alias{stations_matsch}
 \title{Shapefile with location of matsch meteorological stations}
 \format{
-An sf object loaded using st_read()
+An sf object with 16 features and 4 variables:
+\describe{
+\item{st_id}{id of the station}
+\item{dem}{elevation of the station in meters, extracted from a dem at 25m resolution}
+\item{slope}{slope of the station in degrees, extracted from a slope map at 25m resolution}
+\item{aspect}{aspect of the station in degrees, extracted from an aspect map at 25m resolution}
+}
 }
 \usage{
 stations_matsch
