@@ -55,6 +55,22 @@
 #' @source \url{https://desktop.arcgis.com/de/arcmap/10.3/tools/spatial-analyst-toolbox/how-aspect-works.htm}
 "aspect_map2"
 
+#' Table with information about the beratungsring stations
+#'
+#' A data.frame containing id, name and sensors for the beratungsring stations
+#'
+#' @format A data frame with 3430 rows and 7 variables:
+#' \describe{
+#' \item{st_id}{id of the station}
+#' \item{st_name}{name of the station}
+#' \item{measurement}{sensor name in german}
+#' \item{measurement_id}{sensor id}
+#' \item{unit}{measurement unit}
+#' \item{column}{string needed to download the station data}
+#' \item{factor}{numeric needed to download the station data}
+#' }
+"br_info"
+
 #' Border of South Tyrol
 #'
 #' Polygon delineating the border or South Tyrol (Italy)
@@ -80,19 +96,56 @@
 #'
 #' A shapefile with point coordinates that describe the location of the province meteorological stations
 #'
-#' @format An sf object loaded using st_read()
+#' @format An sf object with 119 features and 4 variables:
+#' \describe{
+#' \item{st_id}{id of the station}
+#' \item{dem}{elevation of the station in meters, extracted from a dem at 25m resolution}
+#' \item{slope}{slope of the station in degrees, extracted from a slope map at 25m resolution}
+#' \item{aspect}{aspect of the station in degrees, extracted from an aspect map at 25m resolution}
+#' }
+
 "stations_province"
 
 #' Shapefile with location of rebecka meteorological stations
 #'
 #' A shapefile with point coordinates that describe the location of the rebecka meteorological stations
 #'
-#' @format An sf object loaded using st_read()
+#' @format An sf object with 33 features and 5 variables:
+#' \describe{
+#' \item{st_id}{id of the station}
+#' \item{st_name}{name of the station}
+#' \item{dem}{elevation of the station in meters, extracted from a dem at 25m resolution}
+#' \item{slope}{slope of the station in degrees, extracted from a slope map at 25m resolution}
+#' \item{aspect}{aspect of the station in degrees, extracted from an aspect map at 25m resolution}
+#' }
+
 "stations_rebecka"
 
 #' Shapefile with location of matsch meteorological stations
 #'
 #' A shapefile with point coordinates that describe the location of the matsch meteorological stations
 #'
-#' @format An sf object loaded using st_read()
+#' @format An sf object with 16 features and 4 variables:
+#' \describe{
+#' \item{st_id}{id of the station}
+#' \item{dem}{elevation of the station in meters, extracted from a dem at 25m resolution}
+#' \item{slope}{slope of the station in degrees, extracted from a slope map at 25m resolution}
+#' \item{aspect}{aspect of the station in degrees, extracted from an aspect map at 25m resolution}
+#' }
+
 "stations_matsch"
+
+#' Shapefile with location of the beratungsring meteorological stations
+#'
+#' A shapefile with point coordinates that describe the location of the beratungsring meteorological stations
+#'
+#' @format An sf object with 138 features and 5 variables:
+#' \describe{
+#' \item{st_id}{id of the station}
+#' \item{st_name}{name of the station}
+#' \item{dem}{elevation of the station in meters, extracted from a dem at 25m resolution}
+#' \item{slope}{slope of the station in degrees, extracted from a slope map at 25m resolution}
+#' \item{aspect}{aspect of the station in degrees, extracted from an aspect map at 25m resolution}
+#' }
+
+"stations_br"
