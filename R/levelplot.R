@@ -1,6 +1,6 @@
 #' Plot raster layers
 #'
-#' This function is a wrapper around the function \link[rasterVis]{levelplot} with more convenient parameter names.
+#' This function is a wrapper around \link[rasterVis]{levelplot-methods} with more convenient parameter names.
 #'
 #' @param raster raster object that should be plotted. Can be a single raster layer or a stack/brick
 #' @param margin A list or a logical. If it is TRUE, two marginal graphics show the column (x) and row (y) summaries of the Raster* object. The summary is computed with the function mean. If it is a list, it contains parameters in ‘name=value’ form that define both margins, and may contain two other lists called ‘x’ and ‘y’ whose components affect the respective margins only.
@@ -9,7 +9,7 @@
 #' @param breaks numeric, locations at which the colors change. Do not changes the legend labels, for this use legend.labels and legend.labels.position
 #' @param nbreaks numeric, number of breaks. Only used when breaks = NULL
 #' @param xlab string, Labels of the x axis. Supports also a vector of strings to draw multiple labels
-#' @param ylabstring, Labels of the y axis. Supports also a vector of strings to draw multiple labels
+#' @param ylab string, Labels of the y axis. Supports also a vector of strings to draw multiple labels
 #' @param axis.labels.color string, color of the axis labels. Changes both x and y labels
 #' @param axis.labels.x.color string, color of the x labels
 #' @param axis.labels.y.color string, color of the y labels
@@ -43,7 +43,7 @@
 #' @param strip.text.color string, color of strip text
 #' @param strip.background.col string, background color of the box around strip title
 #' @param strip.border.col string, color of the box around strip title
-#' @param ... further parameters passed on to \link[rasterVis]{levelplot}
+#' @param ... further parameters passed on to \link[rasterVis]{levelplot-methods}
 #'
 #' @return
 #' @export
@@ -116,6 +116,14 @@ rg_levelplot <- function(raster,
 
   #add parameters to customize axis.ticks. See ?lattice::xyplot for details
 
+  #add customization of legend title. Example:
+  # levelplot(r, margin = FALSE,
+  #           colorkey = list(title = "[m]",
+  #                           title.gpar = list(cex = 1,
+  #                                             font = 2,
+  #                                             col = 'red')
+  #           ))
+
   #get palette if string is given as input
   if(is.character(palette) & length(palette) == 1) {
     palette <- switch (palette,
@@ -129,8 +137,8 @@ rg_levelplot <- function(raster,
 
   #construct breaks if none given
   if(is.null(breaks)) {
-    breaks <- seq(min(minValue(dem)),
-                  max(maxValue(dem)),
+    breaks <- seq(min(minValue(raster)),
+                  max(maxValue(raster)),
                   length.out = nbreaks)
     breaks <- round(breaks, -1)
   }
