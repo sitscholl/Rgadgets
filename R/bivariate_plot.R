@@ -198,35 +198,37 @@ rg_biv_plot_raster <- function(bivraster, cmat, xlab = '', ylab = '', border = N
   # Transform raster to data.frame
   r_df <-
     bivraster %>%
-    projectRaster(crs = crs) %>%
-    as.data.frame(xy = TRUE) %>%
-    as_tibble() %>%
+    raster::projectRaster(crs = crs) %>%
+    raster::as.data.frame(xy = TRUE) %>%
+    tibble::as_tibble() %>%
     dplyr::rename("BivValue" = 3) %>%
-    pivot_longer(names_to = "Variable", values_to = "bivVal", cols = BivValue)
+    tidyr::pivot_longer(names_to = "Variable",
+                        values_to = "bivVal",
+                        cols = BivValue)
 
   # Create ggplot without legend
   map <-
-    ggplot() +
-    geom_raster(data = r_df, aes(fill = bivVal, x = x, y = y)) +
+    ggplot2::ggplot() +
+    ggplot2::geom_raster(data = r_df, aes(fill = bivVal, x = x, y = y)) +
 
-    scale_fill_gradientn(colours = cmat, na.value = na.value) +
+    ggplot2::scale_fill_gradientn(colours = cmat, na.value = na.value) +
 
-    theme_bw() +
-    theme(legend.position = "none") +
-    labs(x = "Longitude", y = "Latitude")
+    ggplot2::theme_bw() +
+    ggplot2::theme(legend.position = "none") +
+    ggplot2::labs(x = "Longitude", y = "Latitude")
 
-  if(!is.null(border)) map <- map + geom_sf(data = border, fill = NA)
-  if(!is.null(limits)) map <- map  + coord_sf(xlim = c(limits[[1]], limits[[2]]),
-                                              ylim = c(limits[[3]], limits[[4]]),
-                                              expand = FALSE)
+  if(!is.null(border)) map <- map + ggplot2::geom_sf(data = border, fill = NA)
+  if(!is.null(limits)) map <- map  + ggplot2::coord_sf(xlim = c(limits[[1]], limits[[2]]),
+                                                       ylim = c(limits[[3]], limits[[4]]),
+                                                       expand = FALSE)
 
   # Overlay the legend on the map
   #create legend as ggplot object
-  legend <- rg_biv_get_legend(cmat, xlab = xlab, ylab = ylab)
+  legend <- Rgadgets::rg_biv_get_legend(cmat, xlab = xlab, ylab = ylab)
   fig <-
     map %>%
     cowplot::ggdraw() +
-    cowplot::draw_plot(legend + theme(plot.background = element_rect(fill = "white", colour = NA)),
+    cowplot::draw_plot(legend + ggplot2::theme(plot.background = ggplot2::element_rect(fill = "white", colour = NA)),
                        width = legend.width,
                        height = legend.height,
                        x = legend.x,

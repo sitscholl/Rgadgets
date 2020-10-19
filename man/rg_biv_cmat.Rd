@@ -114,7 +114,7 @@ for the plot.
 breaks <- 3
 cmat <- rg_biv_cmat(breaks, style = 1)
 legend <- rg_biv_get_legend(cmat, xlab = 'Gain', ylab = 'Loss')
-xy <- rg_biv_create_raster(raster(x), raster(y), breaks)
+xy <- rg_biv_create_raster(x, y, breaks)
 map <- rg_biv_plot_raster(xy, cmat, border = st_border_proj, xlab = 'Gain', ylab = 'Loss', limits = c(10.7, 12, 46.2, 46.8))
 map
 }
