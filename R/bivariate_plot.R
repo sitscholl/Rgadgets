@@ -28,7 +28,7 @@
 #' @param legend.width numeric, width of legend
 #' @param legend.x numeric, relative x position of legend
 #' @param legnend.y numeric, relative y position of legend
-#' @param limits optionally zoom in into plot using x and y limits via \link[ggplot2]{coord_sf}. Use the syntax limits = c(xmin, xmax, ymin, ymax).
+#' @param limits optionally zoom in into plot using x and y limits. Use the syntax limits = c(xmin, xmax, ymin, ymax).
 #' @param label.size numeric, size of legend labels
 #' @param label.color string, color of legend label
 #'
@@ -38,7 +38,7 @@
 #' breaks <- 3
 #' cmat <- rg_biv_cmat(breaks, style = 1)
 #' legend <- rg_biv_get_legend(cmat, xlab = 'Gain', ylab = 'Loss')
-#' xy <- rg_biv_create_raster(raster(x), raster(y), breaks)
+#' xy <- rg_biv_create_raster(x, y, breaks)
 #' map <- rg_biv_plot_raster(xy, cmat, border = st_border_proj, xlab = 'Gain', ylab = 'Loss', limits = c(10.7, 12, 46.2, 46.8))
 #' map
 
@@ -115,9 +115,9 @@ rg_biv_cmat <- function(breaks, style = 1,
   #create color scale for given breaks
   b <- breaks-1
   b <- (0:b)/b
-  col1 <- rgb(colorRamp(c(upperleft, lowerleft))(b), max=255)
-  col2 <- rgb(colorRamp(c(upperright, lowerright))(b), max=255)
-  cm <- apply(cbind(col1, col2), 1, function(i) rgb(colorRamp(i)(b), max=255))
+  col1 <- grDevices::rgb(grDevices::colorRamp(c(upperleft, lowerleft))(b), max=255)
+  col2 <- grDevices::rgb(grDevices::colorRamp(c(upperright, lowerright))(b), max=255)
+  cm <- apply(cbind(col1, col2), 1, function(i) grDevices::rgb(grDevices::colorRamp(i)(b), max=255))
 
   #fill matrix with color values
   return(cm[, ncol(cm):1 ])
@@ -136,7 +136,7 @@ rg_biv_get_legend <- function(cmat, xlab="", ylab="",
   legend_df <-
     cmat %>%
     as.data.frame() %>%
-    tidyr::pivot_longer(cols = everything()) %>%
+    tidyr::pivot_longer(cols = tidyselect::everything()) %>%
     dplyr::mutate(y = rep(1:breaks, times = breaks),
                   x = rep(1:breaks, each = breaks))
 
@@ -169,15 +169,15 @@ rg_biv_get_legend <- function(cmat, xlab="", ylab="",
 rg_biv_create_raster <- function(x, y, breaks) {
 
   #Create quantiles of raster values
-  q1 <- quantile(x, seq(0,1,1/(breaks)))
-  q2 <- quantile(y, seq(0,1,1/(breaks)))
+  q1 <- raster::quantile(x, seq(0,1,1/(breaks)))
+  q2 <- raster::quantile(y, seq(0,1,1/(breaks)))
 
   #Reclassify raster values to quantiles
-  r1 <- cut(x, q1, include.lowest=TRUE)
-  r2 <- cut(y, q2, include.lowest=TRUE)
+  r1 <- raster::cut(x, q1, include.lowest=TRUE)
+  r2 <- raster::cut(y, q2, include.lowest=TRUE)
 
   #Calculate rasterCM
-  rasterCM <- overlay(r1, r2, fun=function(i, j) {
+  rasterCM <- raster::overlay(r1, r2, fun=function(i, j) {
     (j-1) * breaks + i
   })
 

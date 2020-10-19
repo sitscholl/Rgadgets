@@ -85,7 +85,7 @@ rg_biv_plot_raster(
 
 \item{legend.x}{numeric, relative x position of legend}
 
-\item{limits}{optionally zoom in into plot using x and y limits via \link[ggplot2]{coord_sf}. Use the syntax limits = c(xmin, xmax, ymin, ymax).}
+\item{limits}{optionally zoom in into plot using x and y limits. Use the syntax limits = c(xmin, xmax, ymin, ymax).}
 
 \item{legnend.y}{numeric, relative y position of legend}
 }
