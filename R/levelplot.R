@@ -6,8 +6,10 @@
 #' @param margin A list or a logical. If it is TRUE, two marginal graphics show the column (x) and row (y) summaries of the Raster* object. The summary is computed with the function mean. If it is a list, it contains parameters in ‘name=value’ form that define both margins, and may contain two other lists called ‘x’ and ‘y’ whose components affect the respective margins only.
 #' @param layout vector to specify number of columns and rows in the form c(ncol, nrow)
 #' @param palette string, the name of the palette or a function that returns color names such as RColorBrewer::brewer.pal(9, 'RdBu). If the name of the palette is given must be one of 'RdBu', 'BuRd', 'Magma', 'Viridis', 'Inferno'.
+#' @param rev logical, should the palette be reversed?
 #' @param breaks numeric, locations at which the colors change. Do not changes the legend labels, for this use legend.labels and legend.labels.position
 #' @param nbreaks numeric, number of breaks. Only used when breaks = NULL
+#' @param classification.style string, style of the classification, one of "fixed", "sd", "equal", "pretty", "quantile", "kmeans", "hclust", "bclust", "fisher", "jenks", "dpih" or "headtails". See \link[classInt]{classIntervals}. Only used when breaks = NULL
 #' @param xlab string, Labels of the x axis. Supports also a vector of strings to draw multiple labels
 #' @param ylab string, Labels of the y axis. Supports also a vector of strings to draw multiple labels
 #' @param axis.labels.color string, color of the axis labels. Changes both x and y labels
@@ -34,6 +36,9 @@
 #' @param legend.width numeric, width of the legend
 #' @param legend.height numeric, height of the legend
 #' @param legend.title string, title of the legend. Seems not to work when legend.position = 'right'
+#' @param legend.title.size = numeric, size of legend title
+#' @param legend.title.font = numeric, font of legend title. 1 = plain, 2 = bold
+#' @param legend.title.col = string, color of legend title
 #' @param plot.background.col string, background color of the plot
 #' @param plot.title string, title of the plot
 #' @param plot.title.size numeric, size of the plot title
@@ -41,6 +46,7 @@
 #' @param strip.text string, vector of titles of plot strips. Length must be equal to the number of plot strips
 #' @param strip.text.size numeric, size of strip text
 #' @param strip.text.color string, color of strip text
+#' @param strip.text.font numeric, font of strip text. 1 = plain, 2 = bold
 #' @param strip.background.col string, background color of the box around strip title
 #' @param strip.border.col string, color of the box around strip title
 #' @param ... further parameters passed on to \link[rasterVis]{levelplot-methods}
@@ -61,13 +67,17 @@
 rg_levelplot <- function(raster,
                          margin = FALSE,
                          layout = NULL,
-                         palette = viridis::viridis(10),
 
-                         breaks = NULL,
+                         palette = viridis::viridis(10),
+                         rev = F,
+
+                         classification.style = 'pretty',
                          nbreaks = 5,
+                         breaks = NULL,
 
                          xlab = NULL,
                          ylab = NULL,
+
                          axis.labels.color = NULL,
                          axis.labels.x.color = 'black',
                          axis.labels.y.color = 'black',
@@ -82,10 +92,10 @@ rg_levelplot <- function(raster,
                          axis.labels.y.font = 'plain',
 
                          axis.ticks = NULL,
-                         axis.ticks.x = T,
-                         axis.ticks.y = T,
+                         axis.ticks.x = F,
+                         axis.ticks.y = F,
 
-                         axis.line.col = 'transparent',
+                         axis.line.col = 'black',
 
                          legend.labels = NULL,
                          legend.label.position = NULL,
@@ -94,7 +104,11 @@ rg_levelplot <- function(raster,
                          legend.line.color = 'black',
                          legend.width = 1,
                          legend.height = 1,
+
                          legend.title = NULL,
+                         legend.title.size = 1,
+                         legend.title.font = 1,
+                         legend.title.col = 'black',
 
                          plot.background.col = 'transparent',
                          plot.title = NULL,
@@ -104,6 +118,7 @@ rg_levelplot <- function(raster,
                          strip.text = names(raster),
                          strip.text.size = 1,
                          strip.text.color = 'black',
+                         strip.text.font = 1,
                          strip.background.col = 'transparent',
                          strip.border.col = 'transparent',
 
@@ -116,13 +131,9 @@ rg_levelplot <- function(raster,
 
   #add parameters to customize axis.ticks. See ?lattice::xyplot for details
 
-  #add customization of legend title. Example:
-  # levelplot(r, margin = FALSE,
-  #           colorkey = list(title = "[m]",
-  #                           title.gpar = list(cex = 1,
-  #                                             font = 2,
-  #                                             col = 'red')
-  #           ))
+  #include xlim and ylim
+
+  #to construct breaks consider package "BAMMtools" with function "getJenksBreaks" because much faster than classInterval
 
   #get palette if string is given as input
   if(is.character(palette) & length(palette) == 1) {
@@ -135,12 +146,19 @@ rg_levelplot <- function(raster,
     )
   }
 
+  if(rev) palette <- rev(palette)
+
   #construct breaks if none given
   if(is.null(breaks)) {
-    breaks <- seq(min(minValue(raster)),
-                  max(maxValue(raster)),
-                  length.out = nbreaks)
-    breaks <- round(breaks, -1)
+    vals <- na.omit(raster::getValues(raster))
+
+    breaks <- classInt::classIntervals(vals,
+                                       n = nbreaks,
+                                       style = classification.style)
+    breaks <- round(breaks$brks, 0)
+
+    if(is.null(legend.labels)) legend.labels <- breaks
+    if(is.null(legend.label.position)) legend.label.position <- breaks
   }
 
   #set axis ticks
@@ -195,6 +213,11 @@ rg_levelplot <- function(raster,
                    title = legend.title
                    )
 
+  #if legend.title.size or other parameter is passed directly to colorkey legend cannot be turned off anymore
+  if(!is.null(legend.title)) colorkey[['title.gpar']] <- list(cex = legend.title.size,
+                                                              font = legend.title.font,
+                                                              col = legend.title.col)
+
   #adjust axis ticks
   axis_ticks <- list(x = list(draw = axis.ticks.x),
                      y = list(draw = axis.ticks.y))
@@ -208,7 +231,8 @@ rg_levelplot <- function(raster,
                                #strip text
                                names.attr = strip.text,
                                par.strip.text = list(cex = strip.text.size,
-                                                     col = strip.text.color),
+                                                     col = strip.text.color,
+                                                     fontface = strip.text.font),
 
                                #plot title and labels
                                main = list(label = plot.title,
@@ -236,7 +260,8 @@ rg_levelplot <- function(raster,
                                colorkey = colorkey,
 
                                #axis ticks
-                               scales = axis_ticks)
+                               scales = axis_ticks,
+                               ...)
 
   #latticeExtra::layer(sp.lines(as_Spatial(st_border), lwd = 1))
 
