@@ -9,8 +9,10 @@ rg_levelplot(
   margin = FALSE,
   layout = NULL,
   palette = viridis::viridis(10),
-  breaks = NULL,
+  rev = F,
+  classification.style = "pretty",
   nbreaks = 5,
+  breaks = NULL,
   xlab = NULL,
   ylab = NULL,
   axis.labels.color = NULL,
@@ -26,9 +28,9 @@ rg_levelplot(
   axis.labels.x.font = "plain",
   axis.labels.y.font = "plain",
   axis.ticks = NULL,
-  axis.ticks.x = T,
-  axis.ticks.y = T,
-  axis.line.col = "transparent",
+  axis.ticks.x = F,
+  axis.ticks.y = F,
+  axis.line.col = "black",
   legend.labels = NULL,
   legend.label.position = NULL,
   legend.label.size = 1,
@@ -37,6 +39,9 @@ rg_levelplot(
   legend.width = 1,
   legend.height = 1,
   legend.title = NULL,
+  legend.title.size = 1,
+  legend.title.font = 1,
+  legend.title.col = "black",
   plot.background.col = "transparent",
   plot.title = NULL,
   plot.title.size = 1,
@@ -44,6 +49,7 @@ rg_levelplot(
   strip.text = names(raster),
   strip.text.size = 1,
   strip.text.color = "black",
+  strip.text.font = 1,
   strip.background.col = "transparent",
   strip.border.col = "transparent",
   ...
@@ -58,9 +64,13 @@ rg_levelplot(
 
 \item{palette}{string, the name of the palette or a function that returns color names such as RColorBrewer::brewer.pal(9, 'RdBu). If the name of the palette is given must be one of 'RdBu', 'BuRd', 'Magma', 'Viridis', 'Inferno'.}
 
-\item{breaks}{numeric, locations at which the colors change. Do not changes the legend labels, for this use legend.labels and legend.labels.position}
+\item{rev}{logical, should the palette be reversed?}
+
+\item{classification.style}{string, style of the classification, one of "fixed", "sd", "equal", "pretty", "quantile", "kmeans", "hclust", "bclust", "fisher", "jenks", "dpih" or "headtails". See \link[classInt]{classIntervals}. Only used when breaks = NULL}
 
 \item{nbreaks}{numeric, number of breaks. Only used when breaks = NULL}
+
+\item{breaks}{numeric, locations at which the colors change. Do not changes the legend labels, for this use legend.labels and legend.labels.position}
 
 \item{xlab}{string, Labels of the x axis. Supports also a vector of strings to draw multiple labels}
 
@@ -114,6 +124,12 @@ rg_levelplot(
 
 \item{legend.title}{string, title of the legend. Seems not to work when legend.position = 'right'}
 
+\item{legend.title.size}{= numeric, size of legend title}
+
+\item{legend.title.font}{= numeric, font of legend title. 1 = plain, 2 = bold}
+
+\item{legend.title.col}{= string, color of legend title}
+
 \item{plot.background.col}{string, background color of the plot}
 
 \item{plot.title}{string, title of the plot}
@@ -127,6 +143,8 @@ rg_levelplot(
 \item{strip.text.size}{numeric, size of strip text}
 
 \item{strip.text.color}{string, color of strip text}
+
+\item{strip.text.font}{numeric, font of strip text. 1 = plain, 2 = bold}
 
 \item{strip.background.col}{string, background color of the box around strip title}
 
