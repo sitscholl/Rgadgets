@@ -31,13 +31,17 @@ rg_levelplot(
   axis.ticks.x = F,
   axis.ticks.y = F,
   axis.line.col = "black",
+  axis.line.type = 1,
+  axis.line.width = 1,
   legend.labels = NULL,
   legend.label.position = NULL,
   legend.label.size = 1,
   legend.position = "left",
-  legend.line.color = "black",
   legend.width = 1,
   legend.height = 1,
+  legend.line.color = "black",
+  legend.line.type = 1,
+  legend.line.width = 1,
   legend.title = NULL,
   legend.title.size = 1,
   legend.title.font = 1,
@@ -108,6 +112,10 @@ rg_levelplot(
 
 \item{axis.line.col}{string, color of the box around the plot}
 
+\item{axis.line.type}{numeric, linetype of the box around the plot}
+
+\item{axis.line.width}{numeric, linewidth of the box arourn the plot}
+
 \item{legend.labels}{string or numeric, the labels at the side of the legend. Set to legend.labels = breaks to have the same labels as breaks}
 
 \item{legend.label.position}{numeric, the position of the legend labels along the legend. Set to legend.label.position = breaks to have the same positions as specified in breaks}
@@ -116,11 +124,15 @@ rg_levelplot(
 
 \item{legend.position}{string, position of the legend. One of 'top', 'right', 'bottom' or 'left'. Legend.title seems not to work with legend.position = 'right'}
 
-\item{legend.line.color}{string, color of the legend frame}
-
 \item{legend.width}{numeric, width of the legend}
 
 \item{legend.height}{numeric, height of the legend}
+
+\item{legend.line.color}{string, line color of the legend frame}
+
+\item{legend.line.type}{numeric, linetype of the legend frame}
+
+\item{legend.line.width}{numeric, linewidth of the legend frame}
 
 \item{legend.title}{string, title of the legend. Seems not to work when legend.position = 'right'}
 

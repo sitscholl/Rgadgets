@@ -28,13 +28,17 @@
 #' @param axis.ticks.x logical, should x axis ticks be displayed?
 #' @param axis.ticks.y logical, should y axis ticks be displayed?
 #' @param axis.line.col string, color of the box around the plot
+#' @param axis.line.type numeric, linetype of the box around the plot
+#' @param axis.line.width numeric, linewidth of the box arourn the plot
 #' @param legend.labels string or numeric, the labels at the side of the legend. Set to legend.labels = breaks to have the same labels as breaks
 #' @param legend.label.position numeric, the position of the legend labels along the legend. Set to legend.label.position = breaks to have the same positions as specified in breaks
 #' @param legend.label.size numeric, size of the legend labels
 #' @param legend.position string, position of the legend. One of 'top', 'right', 'bottom' or 'left'. Legend.title seems not to work with legend.position = 'right'
-#' @param legend.line.color string, color of the legend frame
 #' @param legend.width numeric, width of the legend
 #' @param legend.height numeric, height of the legend
+#' @param legend.line.color string, line color of the legend frame
+#' @param legend.line.type numeric, linetype of the legend frame
+#' @param legend.line.width numeric, linewidth of the legend frame
 #' @param legend.title string, title of the legend. Seems not to work when legend.position = 'right'
 #' @param legend.title.size = numeric, size of legend title
 #' @param legend.title.font = numeric, font of legend title. 1 = plain, 2 = bold
@@ -96,14 +100,19 @@ rg_levelplot <- function(raster,
                          axis.ticks.y = F,
 
                          axis.line.col = 'black',
+                         axis.line.type = 1,
+                         axis.line.width = 1,
 
                          legend.labels = NULL,
                          legend.label.position = NULL,
                          legend.label.size = 1,
                          legend.position = 'left',
-                         legend.line.color = 'black',
                          legend.width = 1,
                          legend.height = 1,
+
+                         legend.line.color = 'black',
+                         legend.line.type = 1,
+                         legend.line.width = 1,
 
                          legend.title = NULL,
                          legend.title.size = 1,
@@ -155,10 +164,11 @@ rg_levelplot <- function(raster,
     breaks <- classInt::classIntervals(vals,
                                        n = nbreaks,
                                        style = classification.style)
-    breaks <- round(breaks$brks, 0)
+    #breaks <- round(breaks$brks, 0)
+    breaks <- breaks$brks
 
-    if(is.null(legend.labels)) legend.labels <- breaks
-    if(is.null(legend.label.position)) legend.label.position <- breaks
+    if(is.null(legend.labels)) legend.labels <- round(breaks, 2)
+    if(is.null(legend.label.position)) legend.label.position <- round(breaks, 2)
   }
 
   #set axis ticks
@@ -195,13 +205,17 @@ rg_levelplot <- function(raster,
   theme <- rasterVis::rasterTheme(region = palette,
                                   strip.background = list(col = strip.background.col),
                                   strip.border = list(col = strip.border.col),
-                                  axis.line = list(col = axis.line.col),
+                                  axis.line = list(col = axis.line.col,
+                                                   lty = axis.line.type,
+                                                   lwd = axis.line.width),
                                   panel.background = list(col = plot.background.col))
 
   #adjust colorkey (=legend)
   colorkey <- list(at = breaks, #legend breaks
                    space = legend.position, #legend position
-                   axis.line = list(col = legend.line.color), #legend frame
+                   axis.line = list(col = legend.line.color,
+                                    lty = legend.line.type,
+                                    lwd = legend.line.width), #legend frame
 
                    width = legend.width,
                    height = legend.height,
@@ -211,7 +225,7 @@ rg_levelplot <- function(raster,
                                  at = legend.label.position,
                                  labels = legend.labels),
                    title = legend.title
-                   )
+  )
 
   #if legend.title.size or other parameter is passed directly to colorkey legend cannot be turned off anymore
   if(!is.null(legend.title)) colorkey[['title.gpar']] <- list(cex = legend.title.size,
