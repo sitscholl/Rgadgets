@@ -15,16 +15,23 @@
 #'
 #' @source \url{https://github.com/mattia6690/MonalisR/blob/master/R/Processing.R}
 #'
-#' @format The table returned by the function \code{rg_progince_info} contains the following information:
+#' @format The downloaded data contains the following information:
 #' \describe{
-#'   \item{SCODE}{ID of the station}
-#'   \item{NAME_D}{Full name of the station}
-#'   \item{ALT}{Station elevation in meters}
-#'   \item{LONG}{Station longitude in EPSG:4326}
-#'   \item{LAT}{Station latitude in EPSG:4326}
-#'   \item{TYPE}{Sensor Type}
-#'   \item{DESC_D}{Full name of Sensor}
-#'   \item{unit}{Measurement unit of the sensor}
+#'   \item{st_id}{ID of the station}
+#'   \item{datetime}{date and time of measurement}
+#'   \item{tair}{Air temperature in 2m height in deg C}
+#'   \item{preci}{Precipitation in mm}
+#'   \item{relative_air_humidity}{Relative air humidity in percent}
+#'   \item{wind_speed}{Wind Speed in m/s}
+#'   \item{wind_direction}{Wind direction in degree}
+#'   \item{snow_height}{Snow height in cm}
+#'   \item{rad_h}{Duration of sun radiation (Sonnenscheindauer) in s}
+#'   \item{rad}{Global solar radiation in W/m2}
+#'   \item{water_temperature}{Water temperature in deg C}
+#'   \item{water_height}{Height of the water (Wasserstand) in cm}
+#'   \item{flow}{Amount of water flowing (Durchfluss) in m3/s}
+#'   \item{air_particles}{Concentration of air particles (Schwebstoffkonzentration) in mg/l}
+#'   \item{groundwater_height}{Height of the groundwater (Grundwasserstand) in m}
 #' }
 #'
 #' @importFrom dplyr mutate select rename arrange
@@ -49,7 +56,8 @@ rg_province_get <- function(station_code,
                             datestart = Sys.Date() - 1,
                             dateend = Sys.Date(),
                             format = 'wide',
-                            dburl = "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries"){
+                            dburl = "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries",
+                            ...){
 
   stopifnot(all(sapply(list(datestart, dateend), lubridate::is.Date)))
 
@@ -117,7 +125,18 @@ rg_province_get <- function(station_code,
                                            'LT' = 'tair',
                                            'GS' = 'rad',
                                            'N' = 'preci',
-                                           'SD' = 'radh')) %>%
+                                           'SD' = 'rad_h',
+                                           'WG' = 'wind_speed',
+                                           'WR' = 'wind_dir',
+                                           'WG.BOE' = 'wind_speed_boe',
+                                           'HS' = 'snow_height',
+                                           'LF' = 'relative_air_humidity',
+                                           'LD.RED' = 'air_pressure',
+                                           'WT' = 'water_temperature',
+                                           'W' = 'water_height',
+                                           'Q' = 'flow',
+                                           'SSTF' = 'air_particles',
+                                           'W.ABST' = 'groundwater_height')) %>%
 
       #Sometimes duplicated records appear in table (often on 2018-10-28). Keep first row
       dplyr::distinct(st_id, sensor, datetime, .keep_all = T)
