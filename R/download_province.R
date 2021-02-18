@@ -57,6 +57,7 @@ rg_province_get <- function(station_code,
                             dateend = Sys.Date(),
                             format = 'wide',
                             dburl = "http://daten.buergernetz.bz.it/services/meteo/v1/timeseries",
+                            progress = F,
                             ...){
 
   stopifnot(all(sapply(list(datestart, dateend), lubridate::is.Date)))
@@ -81,7 +82,7 @@ rg_province_get <- function(station_code,
     dplyr::mutate(End = End + 1) %>%
     dplyr::mutate(dplyr::across(tidyselect::everything(), ~format(.x, format = "%Y%m%d")))
 
-  dat <-
+  param_df <-
     expand.grid(station_code, sensor_code, stringsAsFactors = FALSE) %>%
     tibble::as_tibble() %>%
     setNames(c("SCODE","Sensor")) %>%
@@ -98,10 +99,21 @@ rg_province_get <- function(station_code,
         paste0(.,"&date_from=",Start) %>%
         paste0(.,"&date_to=",End)
 
-    })) %>%
+    }))
 
-    dplyr::mutate(Data= lapply(URL, function(x){
-      tryCatch({as_tibble(jsonlite::fromJSON(x))},error=function(e){NA})
+  if(progress) {
+    pb <- progress::progress_bar$new(format = " downloading station :what [:bar] :percent in :elapsed",
+                                     total = nrow(param_df), clear = FALSE, width= 80)
+  }
+
+  dat <-
+    param_df %>%
+    dplyr::mutate(Data = purrr::pmap(., function(URL, SCODE, ...){
+      dat_new <- tryCatch({as_tibble(jsonlite::fromJSON(URL))},error=function(e){NA})
+
+      if(progress) pb$tick(tokens = list(what = paste(SCODE, '    ')))
+
+      return(dat_new)
     }))
 
   fmt <-
