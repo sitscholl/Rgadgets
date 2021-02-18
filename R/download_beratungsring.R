@@ -16,6 +16,44 @@
 #'
 #' @source \url{https://github.com/GiulioGenova/SBR}
 #'
+#' @format The downloaded data contains the following information:
+#' \describe{
+#'   \item{st_id}{ID of the station}
+#'   \item{datetime}{date and time of measurement}
+#'   \item{tair}{Air temperature in 2m height in deg C}
+#'   \item{preci}{Precipitation in mm/interval}
+#'   \item{relative_air_humidity}{Relative air humidity in percent}
+#'   \item{soil_t_25cm}{Soil temperature in 25cm depth in deg C}
+#'   \item{tair_dry_60cm}{Dry air temperature at 60cm height in deg C}
+#'   \item{tair_wet_60cm}{Wet air temperature at 60cm height in deg C}
+#'   \item{supply_voltage}{Battery energy in Volt}
+#'   \item{wind_speed}{Wind Speed in m/s}
+#'   \item{wind_direction}{Wind direction}
+#'   \item{leaf_wetness}{Leaf wetness in percent}
+#'   \item{irrigation}{Irrigation on or off}
+#'   \item{evaporation}{Evaporation (without unit)}
+#'   \item{Drying}{Drying (of the leaves?)}
+#'   \item{rad}{Global solar radiation (no unit given)}
+#'   \item{tmin}{Minimum air temperature at 2m height during the measurement interval in deg C}
+#'   \item{tmax}{Maximum air temperature at 2m height during the measurement interval in deg C}
+#'   \item{wetness_min}{Mimimum wetness during the measurement interval in percent}
+#'   \item{wetness_max}{Maximum wetness during the measurement interval in percent}
+#'   \item{wind_speed_max}{Maximum wind speed during measurement interval in m/s}
+#'   \item{irrigation_volumn}{Amount of water from irrigation in  mm}
+#'   \item{soil_moisture_20cm}{Soil moisture at 20cm depth in percent}
+#'   \item{soil_moisture_40cm}{Soil moisture at 40cm depth in percent}
+#'   \item{water_potential_20cm}{Water potential of soil in 20cm depth in kPa}
+#'   \item{water_potential_40cm}{Water potential of soil in 40cm depth in kPa}
+#'   \item{soil_t_10cm}{Soil temperature at 10cm depth in deg C}
+#'   \item{soil_t_30cm}{Soil temperature at 30cm depth in deg C}
+#'   \item{t_switch_cabinet}{Temperature of the switch cabinet in deg C}
+#'   \item{energy_consumption}{Consumption of energy in Wh}
+#'   \item{air_pressure}{Air pressure in hPa}
+#'   \item{preci_max_intensity}{Maximum precipitation intensity in mm/h}
+#'   \item{preci_type}{Precipitation type}
+#'   \item{battery_status}{Remaining energy in battery}
+#' }
+#'
 #' @importFrom magrittr "%>%"
 #' @export
 #'
@@ -33,7 +71,8 @@ rg_br_get <- function(station_code,
                       sensor_code = 'simple',
                       datestart = Sys.Date() - 1,
                       dateend = Sys.Date(),
-                      progress = F){
+                      progress = F,
+                      ...){
 
   #function to connect to database and request data
   query_SBR_data <- function(year, sensor_query){
@@ -153,6 +192,44 @@ rg_br_get <- function(station_code,
 
       dplyr::rename(st_id = id) %>%
       dplyr::rename_with(tolower) %>%
+
+      dplyr::rename_with(
+        ~ case_when(
+          . == "temperatur_2m" ~ "tair",
+          . == "niederschlag" ~ "preci",
+          . == 'relative_luftfeuchtigkeit' ~ 'relative_air_humidity',
+          . == 'bodentemperatur_-25cm' ~ 'soil_t_25cm',
+          . == 'trockentemperatur_60cm' ~ 'tair_dry_60cm',
+          . == 'feuchttemperatur_60cm' ~ 'tair_wet_60cm',
+          . == 'versorgungsspannung' ~ 'supply_voltage',
+          . == 'windgeschwindigkeit' ~ 'wind_speed',
+          . == 'windrichtung' ~ 'wind_direction',
+          . == 'blattnaesse' ~ 'leaf_wetness',
+          . == 'beregnung' ~ 'irrigation',
+          . == 'verdunstung' ~ 'evaporation',
+          . == 'abtrocknung' ~ 'drying',
+          . == 'globale_sonnenstrahlung' ~ 'rad',
+          . == 't2m_min_in_messinterval' ~ 'tmin',
+          . == 't2m_max_in_messinterval' ~ 'tmax',
+          . == 'feuchte_min_in_messinterval' ~ 'wetness_min',
+          . == 'feuchte_max_in_messinterval' ~ 'wetness_max',
+          . == 'windgeschw._max._in_messinterval' ~ 'wind_speed_max',
+          . == 'beregnungsmenge' ~ 'irrigation_volume',
+          . == 'bodenfeuchtigkeit_20cm' ~ 'soil_moisture_20cm',
+          . == 'bodenfeuchtigkeit_40cm' ~ 'soil_moisture_40cm',
+          . == 'bodenwasserpotenzial_20cm' ~ 'water_potential_20cm',
+          . == 'bodenwasserpotenzial_40cm' ~ 'water_potential_40cm',
+          . == 'bodentemperatur_-10cm' ~ 'soil_t_10cm',
+          . == 'bodentemperatur_-30cm' ~ 'soil_t_30cm',
+          . == 'schaltschranktemperatur' ~ 't_switch_cabinet',
+          . == 'stromverbrauch' ~ 'energy_consumption',
+          . == 'luftdruck' ~ 'air_pressure',
+          . == 'niederschlagsintensitaet_max' ~ 'preci_max_intensity',
+          . == 'niederschlagsart' ~ 'preci_type',
+          . == 'ladezustand_batterie' ~ 'battery_status',
+          TRUE ~ .
+        )
+      ) %>%
 
       dplyr::select(-c(timestamp)) %>%
       dplyr::select(st_id, datetime, everything()) %>%
