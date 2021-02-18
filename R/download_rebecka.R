@@ -36,11 +36,12 @@ rg_rebecka_get <- function(station_code,
                            dateend = Sys.Date(),
                            url = 'https://api.fieldclimate.com/v1',
                            time_res = 'raw',
-                           progress = T) {
+                           progress = F,
+                           ...) {
 
   stopifnot(all(sapply(list(datestart, dateend), lubridate::is.Date)))
 
-  path <- system.file("data/pessl_api.py", package = "Rgadgets")
+  path <- system.file("data/pessl_api_python3.py", package = "Rgadgets")
   reticulate::source_python(path)
 
   #If dateseq is too long an error occurs because too much data has to be downloaded at once. Therefore
@@ -124,7 +125,7 @@ rg_rebecka_codes <- function(publicKey = '056c0e506344aff17f6b60237d9dabcb87f1e8
                              privateKey,
                              url = 'https://api.fieldclimate.com/v1') {
 
-  path <- system.file("data/pessl_api.py", package = "Rgadgets")
+  path <- system.file("data/pessl_api_python3.py", package = "Rgadgets")
   reticulate::source_python(path)
 
   ids <- py_api_get_st_ids(url = url,
@@ -150,12 +151,12 @@ rg_response_to_df <- function(api_response, sensor_list = NULL, time_res = 'raw'
   #If not given use default list that describes which sensors from the station should be
   #extracted and the new name in the resulting dataframe
   if (is.null(sensor_list)) {
-    sensor_list <- list('Air temperature, high precision' = 'T',
-                        'HC Air temperature' = 'T',
-                        'Drybulb temperature, high precision' = 'T_90cm',
-                        'Air temperature' = 'T_90cm',
+    sensor_list <- list('Air temperature, high precision' = 't',
+                        'HC Air temperature' = 't',
+                        'Drybulb temperature, high precision' = 't_90cm',
+                        'Air temperature' = 't_90cm',
                         'Solar radiation' = 'rad',
-                        'MPS-2 Water potential' = 'soil_wp',
+                        'MPS-2 Water potential' = 'water_potential',
                         'MPS-2 temperature' = 'soil_t')
   }
 
@@ -251,17 +252,17 @@ rg_response_to_df <- function(api_response, sensor_list = NULL, time_res = 'raw'
 
   #Iterate over all remaining sensors and generate a dataframe with the sensor combined with
   #average, min or max as column name and the measured values in the rows
-  station_ts <- tibble::tibble(date = dates)
+  station_ts <- tibble::tibble(datetime = dates)
   for (i in seq_along(clean_list)) {
 
     parameter <- names(clean_list)[[i]]
 
     df_vals <-
       dplyr::bind_rows(clean_list[[i]]) %>%
-      purrr::set_names(stringr::str_c(parameter, names(.), sep = '_')) %>%
-      dplyr::mutate(date = dates)
+      purrr::set_names(stringr::str_c(parameter, names(.), sep = '')) %>%
+      dplyr::mutate(datetime = dates)
 
-    station_ts <- dplyr::left_join(station_ts, df_vals, by = 'date')
+    station_ts <- dplyr::left_join(station_ts, df_vals, by = 'datetime')
 
   }
 
